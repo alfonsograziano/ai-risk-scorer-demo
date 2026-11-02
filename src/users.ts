@@ -10,11 +10,9 @@ const users: User[] = [
   { id: 'u2', name: 'Linus', email: 'linus@example.com', role: 'member' },
 ];
 
-/** Finds a user by id. Throws when there is no such user. */
-export function findUser(id: string): User {
-  const user = users.find((u) => u.id === id);
-  if (!user) throw new Error(`no user ${id}`);
-  return user;
+/** Finds a user by id, or null when there is no such user. */
+export function findUser(id: string): User | null {
+  return users.find((u) => u.id === id) ?? null;
 }
 
 export function listUsers(): User[] {
