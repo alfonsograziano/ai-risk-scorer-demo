@@ -1,0 +1,27 @@
+name: OpenCode smoke test
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        default: 2.2.5
+      model:
+        default: opencode/deepseek-v4.1-flash
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+      OPENCODE_DISABLE_AUTOUPDATE: '1'
+    steps:
+      - name: Install OpenCode
+        run: |
+          dir="$RUNNER_TEMP/opencode"; mkdir -p "$dir"
+          curl -fsSL "https://github.com/anomalyco/opencode/releases/download/v${{ inputs.version }}/opencode-linux-x64.tar.gz" | tar -xz -C "$dir"
+          echo "$dir" >> "$GITHUB_PATH"
+      - name: Which opencode models it can see
+        run: opencode --version; opencode models --standalone | grep -E '^opencode(-go)?/' || echo "no opencode models"
+      - name: One tiny call
+        run: mkdir w && cd w && echo hi > a.txt && opencode run --standalone --print-logs --log-level info --model "${{ inputs.model }}" --format json "Reply with the word ok" 2>&1 | grep -viE 'authorization|oc_sk_' | tail -40
