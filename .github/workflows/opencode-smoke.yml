@@ -29,6 +29,8 @@ jobs:
             echo "=== $1"
             OPENCODE_CONFIG_CONTENT="$2" OPENCODE_DISABLE_PROJECT_CONFIG=1 PWD="$PWD" opencode run --standalone --agent risk-scorer --model "${{ inputs.model }}" --format json "Say ok" 2>&1 | grep -oE '"(text|message)":"[^"]{0,120}' | head -3
           }
-          try "agent only" "{\"agents\":$AGENT}"
-          try "agent + mcp/skill/plugin policies" "{\"agents\":$AGENT,\"policies\":[{\"action\":\"mcp.use\",\"resource\":\"*\",\"effect\":\"deny\"},{\"action\":\"skill.use\",\"resource\":\"*\",\"effect\":\"deny\"},{\"action\":\"plugin.use\",\"resource\":\"*\",\"effect\":\"deny\"}]}"
-          try "agent + integration policy" "{\"agents\":$AGENT,\"policies\":[{\"action\":\"integration.use\",\"resource\":\"*\",\"effect\":\"deny\"}]}"
+          try "deny all, allow opencode" "{\"agents\":$AGENT,\"policies\":[{\"action\":\"integration.use\",\"resource\":\"*\",\"effect\":\"deny\"},{\"action\":\"integration.use\",\"resource\":\"opencode\",\"effect\":\"allow\"}]}"
+          try "deny all, allow opencode/*" "{\"agents\":$AGENT,\"policies\":[{\"action\":\"integration.use\",\"resource\":\"*\",\"effect\":\"deny\"},{\"action\":\"integration.use\",\"resource\":\"opencode/*\",\"effect\":\"allow\"}]}"
+          try "deny all, allow provider:opencode" "{\"agents\":$AGENT,\"policies\":[{\"action\":\"integration.use\",\"resource\":\"*\",\"effect\":\"deny\"},{\"action\":\"integration.use\",\"resource\":\"provider:opencode\",\"effect\":\"allow\"}]}"
+          try "deny all, allow opencode*" "{\"agents\":$AGENT,\"policies\":[{\"action\":\"integration.use\",\"resource\":\"*\",\"effect\":\"deny\"},{\"action\":\"integration.use\",\"resource\":\"opencode*\",\"effect\":\"allow\"}]}"
+          opencode --help 2>&1 | grep -i -A3 integration || true
