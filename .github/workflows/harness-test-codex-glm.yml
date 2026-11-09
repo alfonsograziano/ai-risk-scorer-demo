@@ -1,6 +1,6 @@
-# Temporary: integration test of the claude-code harness on the claude-code-harness branch.
+# Temporary: integration test of the codex harness on the claude-code-harness branch.
 # Shadow mode, and only for PRs into harness-test-base. Remove after the test.
-name: Harness test (claude-code)
+name: Harness test (codex, glm)
 on:
   workflow_run:
     workflows: [CI]
@@ -31,9 +31,9 @@ jobs:
           comment: 'true'
           base-branches: harness-test-base
           api-key: ${{ secrets.OPENCODE_API_KEY }}
-          harness: claude-code
+          harness: codex
           model: glm-5.3
           harness-settings: |
-            base-url: https://opencode.ai/inference/anthropic
+            base-url: https://opencode.ai/inference/openai/v1
           protected-paths: |
             src/payments/**
