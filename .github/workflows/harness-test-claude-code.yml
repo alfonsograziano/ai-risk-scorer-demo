@@ -33,7 +33,7 @@ jobs:
           api-key: ${{ secrets.OPENCODE_API_KEY }}
           harness: claude-code
           harness-settings: |
-            model: claude-sonnet-5-5
+            model: deepseek-v4.1-flash
             base-url: https://opencode.ai/inference/anthropic
           protected-paths: |
             src/payments/**
