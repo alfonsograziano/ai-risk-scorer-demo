@@ -1,4 +1,5 @@
-/** Formats a date as YYYY-MM-DD in UTC. */
+/** Formats a date as YYYY-MM-DD. */
 export function formatDate(d: Date): string {
-  return d.toISOString().slice(0, 10);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
