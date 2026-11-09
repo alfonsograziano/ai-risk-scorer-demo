@@ -1,4 +1,4 @@
-name: AI Risk Scorer
+name: Needs Human Review
 on:
   workflow_run:
     workflows: [CI]
@@ -13,7 +13,7 @@ permissions:
   actions: read
 
 concurrency:
-  group: ai-risk-scorer-${{ github.event.workflow_run.head_sha }}
+  group: needs-human-review-${{ github.event.workflow_run.head_sha }}
   cancel-in-progress: false
 
 jobs:
@@ -27,11 +27,14 @@ jobs:
           ref: ${{ github.event.workflow_run.head_sha }}
           fetch-depth: 0
           persist-credentials: false
-      - uses: alfonsograziano/ai-risk-scorer@v1
-        env:
-          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+      - uses: alfonsograziano/needs-human-review@v2
         with:
           mode: autonomous
-          model: opencode/deepseek-v4.1-flash
+          # An OpenCode key: Claude Code reaches glm-5.3 through OpenCode's Anthropic endpoint.
+          api-key: ${{ secrets.API_KEY }}
+          harness: claude-code
+          model: glm-5.3
+          harness-settings: |
+            base-url: https://opencode.ai/inference/anthropic
           protected-paths: |
             src/payments/**
