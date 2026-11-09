@@ -32,8 +32,8 @@ jobs:
           base-branches: harness-test-base
           api-key: ${{ secrets.OPENCODE_API_KEY }}
           harness: claude-code
+          model: glm-5.3
           harness-settings: |
-            model: deepseek-v4.1-flash
             base-url: https://opencode.ai/inference/anthropic
           protected-paths: |
             src/payments/**
