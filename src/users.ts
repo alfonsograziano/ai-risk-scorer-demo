@@ -10,11 +10,9 @@ const users: User[] = [
   { id: 'u2', name: 'Linus', email: 'linus@example.com', role: 'member' },
 ];
 
-/** Finds a user by id. Throws when there is no such user. */
-export function findUser(id: string): User {
-  const user = users.find((u) => u.id === id);
-  if (!user) throw new Error(`no user ${id}`);
-  return user;
+/** Finds a user by id. */
+export function findUser(id: string): User | undefined {
+  return users.find((u) => u.id === id);
 }
 
 export function listUsers(): User[] {
@@ -32,5 +30,5 @@ export function countAdmins(): number {
 /** Builds the greeting shown on the dashboard. */
 export function greeting(id: string): string {
   const user = findUser(id);
-  return `Welcome back, ${user.name.toUpperCase()}!`;
+  return `Welcome back, ${user!.name.toUpperCase()}!`;
 }
